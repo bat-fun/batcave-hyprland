@@ -1,0 +1,106 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 30,
+
+    "margin-top": 5,
+    "margin-left": 10,
+    "margin-right": 10,
+
+    "spacing": 0,
+
+    "modules-left": [
+        "custom/launcher",
+        "hyprland/workspaces"
+    ],
+
+    "modules-center": ["clock"],
+
+   "modules-right": [
+    "network",
+    "bluetooth",
+    "pulseaudio",
+    "custom/notifications",
+    "custom/lock",
+    "custom/power"
+    ],
+
+    "custom/launcher": {
+        "format": "󰣇",
+        "tooltip": "Applications",
+        "on-click": "rofi -show drun"
+    },
+
+    "hyprland/workspaces": {
+        "format": "{name}",
+        "format-icons": {
+            "default": "○",
+            "active": "●",
+            "persistent": "○"
+        },
+        "on-click": "activate",
+        "sort-by-number": true
+    },
+
+    "network": {
+        "format-wifi": "󰖩",
+        "format-ethernet": "󰈀",
+        "format-disconnected": "󰖪",
+        "tooltip-format": "{essid}\nSignal: {signalStrength}%",
+        "on-click": "nm-connection-editor",
+        "on-click-right": "kitty -e nmtui"
+    },
+
+    "bluetooth": {
+        "format": "󰂯",
+        "format-disabled": "",
+        "format-connected": "󰂱",
+        "tooltip-format": "{device_enumerate}",
+        "on-click": "blueman-manager"
+    },
+
+    "pulseaudio": {
+        "format": "{icon}",
+        "format-muted": "󰖁",
+        "format-icons": {
+            "default": [
+                "󰕿",
+                "󰖀",
+                "󰕾"
+            ]
+        },
+        "tooltip-format": "{volume}%",
+        "on-click": "pavucontrol",
+        "scroll-step": 5
+    },
+
+    "custom/notifications": {
+        "format": "󰂚",
+        "tooltip": "Notifications",
+        "on-click": "swaync-client -t",
+        "on-click-right": "swaync-client -d"
+    },
+
+    "custom/lock": {
+        "format": "󰌾",
+        "tooltip": "Lock",
+        "on-click": "hyprlock"
+    },
+
+    "custom/power": {
+        "format": "󰐥",
+        "tooltip": "Power menu",
+        "on-click": "wlogout"
+    },
+
+    "clock": {
+        "format": "{:%I:%M %p}",
+        "format-alt": "{:%a %d %b  %H:%M}",
+        "tooltip-format": "<big>{:%B %Y}</big>\n<tt>{calendar}</tt>",
+        "on-click": "toggle"
+    },
+    "tray": {
+    "icon-size": 15,
+    "spacing": 6
+    }
+}

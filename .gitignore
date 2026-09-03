@@ -1,0 +1,15 @@
+# Runtime/generated state
+.config/batcave/generated/
+.cache/
+
+# Personal/system state
+*.log
+*.pid
+*.socket
+
+# Editor/OS junk
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db

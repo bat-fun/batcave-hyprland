@@ -1,0 +1,76 @@
+configuration {
+    modi: "drun";
+    show-icons: true;
+    display-drun: "APPS";
+    font: "JetBrainsMono Nerd Font 12";
+}
+
+* {
+    bg: #08090c;
+    surface: #0d1015;
+    fg: #d7dbe1;
+    muted: #69727d;
+    accent: #7892ad;
+    border: #303b47;
+}
+
+window {
+    width: 620px;
+
+    background-color: @bg;
+
+    border: 1px;
+    border-color: @border;
+
+    border-radius: 8px;
+}
+
+mainbox {
+    padding: 18px;
+}
+
+inputbar {
+    padding: 10px;
+
+    background-color: @surface;
+
+    border: 1px;
+    border-color: @border;
+}
+
+prompt {
+    text-color: @accent;
+}
+
+entry {
+    text-color: @fg;
+}
+
+listview {
+    lines: 8;
+    spacing: 4px;
+
+    margin: 14px 0 0;
+}
+
+element {
+    padding: 9px;
+
+    border-radius: 5px;
+}
+
+element-text {
+    text-color: @fg;
+}
+
+element-icon {
+    size: 22px;
+}
+
+element selected {
+    background-color: #151d26;
+}
+
+element selected element-text {
+    text-color: @accent;
+}

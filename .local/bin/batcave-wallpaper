@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+WALLPAPER_DIR="$HOME/Pictures/wallpapers"
+STATE="$HOME/.cache/batcave/last-wallpaper"
+
+mkdir -p "$(dirname "$STATE")"
+
+mapfile -t WALLPAPERS < <(
+    find "$WALLPAPER_DIR" -type f \
+        \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) \
+        -print
+)
+
+if (( ${#WALLPAPERS[@]} == 0 )); then
+    echo "BATCAVE: no wallpapers found in $WALLPAPER_DIR"
+    exit 1
+fi
+
+PREVIOUS=""
+[[ -f "$STATE" ]] && PREVIOUS="$(cat "$STATE")"
+
+CANDIDATES=()
+for wallpaper in "${WALLPAPERS[@]}"; do
+    [[ "$wallpaper" != "$PREVIOUS" ]] && CANDIDATES+=("$wallpaper")
+done
+
+if (( ${#CANDIDATES[@]} == 0 )); then
+    CANDIDATES=("${WALLPAPERS[@]}")
+fi
+
+WALLPAPER="${CANDIDATES[RANDOM % ${#CANDIDATES[@]}]}"
+
+echo "$WALLPAPER" > "$STATE"
+echo "BATCAVE: $WALLPAPER"
+
+awww img "$WALLPAPER" \
+    --transition-type grow \
+    --transition-duration 0.8
+
+"$HOME/.local/bin/batcave-theme" "$WALLPAPER"

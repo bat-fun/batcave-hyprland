@@ -1,0 +1,10 @@
+[SddmGreeterTheme]
+Name=BATCAVE Right Panel
+Description=Minimal Gotham login with right-side authentication panel
+Type=sddm-theme
+Author=Batman
+License=MIT
+Version=1.0
+MainScript=Main.qml
+Theme-Id=batcave
+Theme-API=2.0

@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+WALLPAPER_DIR="$HOME/Pictures/wallpapers"
+CACHE_DIR="$HOME/.cache/batcave"
+
+mkdir -p "$CACHE_DIR"
+
+# Give awww a moment to become available.
+sleep 1
+
+# Pick a wallpaper.
+mapfile -t WALLPAPERS < <(
+    find "$WALLPAPER_DIR" \
+        -type f \
+        \( \
+            -iname "*.jpg" \
+            -o -iname "*.jpeg" \
+            -o -iname "*.png" \
+            -o -iname "*.webp" \
+        \)
+)
+
+if (( ${#WALLPAPERS[@]} == 0 )); then
+    exit 0
+fi
+
+WALLPAPER="${WALLPAPERS[RANDOM % ${#WALLPAPERS[@]}]}"
+
+awww img "$WALLPAPER" \
+    --transition-type grow \
+    --transition-duration 0.8
+
+"$HOME/.local/bin/batcave-theme" "$WALLPAPER"

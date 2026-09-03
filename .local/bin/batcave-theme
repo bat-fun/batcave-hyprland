@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+WALLPAPER="${1:-}"
+
+if [[ -z "$WALLPAPER" || ! -f "$WALLPAPER" ]]; then
+    echo "Usage: batcave-theme <wallpaper>"
+    exit 1
+fi
+
+CACHE_DIR="$HOME/.cache/batcave"
+mkdir -p "$CACHE_DIR"
+
+cp "$WALLPAPER" "$CACHE_DIR/current-wallpaper"
+
+echo "BATCAVE: generating palette..."
+
+matugen image "$WALLPAPER" \
+    --source-color-index 0 \
+    -m dark
+
+echo "BATCAVE: palette generated"
+
+if pgrep -x waybar >/dev/null; then
+    pkill -SIGUSR2 waybar || true
+fi
+
+if command -v kitty >/dev/null 2>&1; then
+    for socket in /tmp/kitty-*; do
+        [[ -e "$socket" ]] || continue
+        kitty @ --to "unix:$socket" set-colors \
+            --all ~/.config/batcave/generated/kitty-colors.conf \
+            2>/dev/null || true
+    done
+fi

@@ -1,0 +1,80 @@
+* {
+    font-family: "JetBrainsMono Nerd Font";
+}
+
+.control-center {
+    background: rgba(13, 14, 19, 0.96);
+    color: #e3e1e9;
+    border: 1px solid rgba(69, 70, 79, 0.75);
+    border-radius: 14px;
+    padding: 14px;
+}
+
+.notification {
+    background: rgba(20, 22, 29, 0.96);
+    color: #e3e1e9;
+    border: 1px solid rgba(69, 70, 79, 0.55);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 5px 0;
+}
+
+.notification-content {
+    color: #e3e1e9;
+}
+
+.summary {
+    color: #b8c4ff;
+    font-weight: bold;
+}
+
+.body {
+    color: #b7b6be;
+}
+
+.time {
+    color: #777783;
+}
+
+.close-button {
+    color: #777783;
+    background: transparent;
+}
+
+.close-button:hover {
+    color: #e3e1e9;
+}
+
+.widget-title {
+    color: #e3e1e9;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.widget-title > button {
+    color: #b8c4ff;
+    background: rgba(184, 196, 255, 0.10);
+    border: 1px solid rgba(184, 196, 255, 0.25);
+    border-radius: 7px;
+}
+
+.widget-dnd {
+    color: #b7b6be;
+}
+
+.widget-dnd > switch:checked {
+    background: #b8c4ff;
+}
+
+button {
+    color: #b7b6be;
+    background: rgba(20, 22, 29, 0.90);
+    border: 1px solid rgba(69, 70, 79, 0.55);
+    border-radius: 8px;
+}
+
+button:hover {
+    color: #e3e1e9;
+    background: rgba(184, 196, 255, 0.12);
+    border-color: rgba(184, 196, 255, 0.55);
+}
