@@ -124,21 +124,21 @@ plan_programs() {
     PROGRAM_EDITOR="$(
         choose_program \
             "Editor / IDE" \
-            "nvim" \
-            nvim \
-            vim \
+            "code" \
             code \
             codium \
+            nvim \
+            vim \
             emacs
     )"
 
     PROGRAM_BROWSER="$(
         choose_program \
             "Browser" \
-            "firefox" \
-            firefox \
+            "brave" \
             brave \
             brave-browser \
+            firefox \
             chromium \
             google-chrome
     )"

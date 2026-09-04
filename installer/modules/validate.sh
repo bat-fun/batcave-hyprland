@@ -116,24 +116,49 @@ validate() {
         return 0
     fi
 
+    local commands=(
+        hyprland
+        waybar
+        kitty
+        rofi
+        hyprlock
+        wlogout
+    )
+
+    if (( FEATURE_THEMING )); then
+        commands+=(matugen)
+    fi
+
+    if (( FEATURE_WALLPAPER )); then
+        commands+=(awww)
+    fi
+
     local command
 
-    for command in \
-        hyprland \
-        waybar \
-        kitty \
-        rofi \
-        hyprlock \
-        wlogout \
-        matugen \
-        awww; do
-
+    for command in "${commands[@]}"; do
         check_command "$command"
     done
 
-    [[ -f "$HOME/.config/hypr/modules/programs.lua" ]] &&
-        ok "program configuration exists" ||
+        if [[ -f "$HOME/.config/hypr/modules/programs.lua" ]]; then
+        ok "program configuration exists"
+    else
         warn "program configuration missing"
+    fi
+
+    local selected_program
+
+    for selected_program in \
+        "$PROGRAM_TERMINAL" \
+        "$PROGRAM_FILE_MANAGER" \
+        "$PROGRAM_EDITOR" \
+        "$PROGRAM_BROWSER"; do
+
+        if command -v "$selected_program" >/dev/null 2>&1; then
+            ok "program available: $selected_program"
+        else
+            warn "selected program not found: $selected_program"
+        fi
+    done
 
     local failed=0
     local script

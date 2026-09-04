@@ -148,9 +148,6 @@ plan_wallpaper() {
 
     section "Wallpaper"
 
-    if (( ! DRY_RUN )); then
-        mkdir -p "$WALLPAPER_DIR"
-    fi
 
     local -a wallpapers=()
     local bundled
@@ -205,18 +202,11 @@ plan_wallpaper() {
             "Add the bundled BATCAVE wallpaper?" \
             "Y"; then
 
-            WALLPAPER_SOURCE="$WALLPAPER_DIR/$(basename "$bundled")"
+            WALLPAPER_SOURCE="$bundled"
             WALLPAPER_MODE="bundled"
 
-            if (( DRY_RUN )); then
-                info "would add $(basename "$bundled")"
-            else
-                cp -n \
-                    "$bundled" \
-                    "$WALLPAPER_DIR/"
-
-                ok "BATCAVE wallpaper added"
-            fi
+            info "bundled wallpaper selected:"
+            info "$(basename "$bundled")"
         fi
     else
         warn "No wallpaper found."
@@ -230,20 +220,81 @@ initialize_wallpaper() {
     if (( ! FEATURE_WALLPAPER )); then
         return 0
     fi
-    
+
     [[ -n "$WALLPAPER_SOURCE" ]] || return 0
 
     section "Wallpaper"
 
     if (( DRY_RUN )); then
-        info "would initialize:"
+        info "would initialize wallpaper"
         info "$WALLPAPER_SOURCE"
         return 0
     fi
 
-    info "selected wallpaper:"
-    info "$WALLPAPER_SOURCE"
+    if [[ "$WALLPAPER_MODE" == "bundled" ]]; then
+        mkdir -p "$WALLPAPER_DIR"
 
-    # Runtime initialization will use BATCAVE's existing
-    # wallpaper/theme helpers after the configuration is installed.
+        local target="$WALLPAPER_DIR/$(basename "$WALLPAPER_SOURCE")"
+
+        if [[ ! -e "$target" ]]; then
+            cp "$WALLPAPER_SOURCE" "$target"
+            ok "BATCAVE wallpaper installed"
+        else
+            info "BATCAVE wallpaper already exists"
+        fi
+
+        WALLPAPER_SOURCE="$target"
+    fi
+
+    if [[ "$WALLPAPER_MODE" == "selected" ]]; then
+        if command -v awww >/dev/null 2>&1; then
+            if awww img "$WALLPAPER_SOURCE" \
+                --transition-type grow \
+                --transition-duration 0.8; then
+
+                mkdir -p "$HOME/.cache/batcave"
+
+                printf '%s\n' "$WALLPAPER_SOURCE" \
+                    > "$HOME/.cache/batcave/last-wallpaper"
+
+                ok "selected wallpaper applied"
+            else
+                warn "selected wallpaper could not be applied"
+            fi
+        else
+            warn "awww is not available; wallpaper not applied"
+        fi
+
+    elif [[ "$WALLPAPER_MODE" == "bundled" ]]; then
+        if command -v awww >/dev/null 2>&1; then
+            if awww img "$WALLPAPER_SOURCE" \
+                --transition-type grow \
+                --transition-duration 0.8; then
+
+                mkdir -p "$HOME/.cache/batcave"
+
+                printf '%s\n' "$WALLPAPER_SOURCE" \
+                    > "$HOME/.cache/batcave/last-wallpaper"
+
+                ok "bundled wallpaper applied"
+            else
+                warn "bundled wallpaper could not be applied"
+            fi
+        else
+            warn "awww is not available; wallpaper not applied"
+        fi
+
+    elif [[ "$WALLPAPER_MODE" == "random" ]]; then
+        if command -v "$HOME/.local/bin/batcave-wallpaper" \
+            >/dev/null 2>&1; then
+
+            if "$HOME/.local/bin/batcave-wallpaper"; then
+                ok "wallpaper initialized"
+            else
+                warn "wallpaper initialization failed"
+            fi
+        else
+            warn "batcave-wallpaper helper not found"
+        fi
+    fi
 }
