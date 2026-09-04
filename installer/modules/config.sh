@@ -68,27 +68,57 @@ install_config() {
 configure_appearance() {
     section "Appearance"
 
-    if (( FEATURE_THEMING )); then
-        if (( DRY_RUN )); then
-            printf '  • would apply dark GTK appearance\n'
-            printf '  • would use Papirus-Dark icons\n'
-            printf '  • would use Bibata-Modern-Ice cursor\n'
-            return
-        fi
-
-        printf '  • applying dark GTK appearance\n'
-        printf '  • configuring Papirus-Dark icons\n'
-        printf '  • configuring Bibata-Modern-Ice cursor\n'
-
-        # GTK appearance
-        if command -v gsettings >/dev/null 2>&1; then
-            gsettings set org.gnome.desktop.interface gtk-theme "adw-gtk3-dark" 2>/dev/null || true
-            gsettings set org.gnome.desktop.interface icon-theme "Papirus-Dark" 2>/dev/null || true
-            gsettings set org.gnome.desktop.interface cursor-theme "Bibata-Modern-Ice" 2>/dev/null || true
-        fi
-
-        printf '  ✓ appearance configured\n'
-    else
-        printf '  • theming skipped\n'
+    if (( ! FEATURE_THEMING )); then
+        info "theming skipped"
+        return 0
     fi
+
+    if (( DRY_RUN )); then
+        info "would apply dark GTK appearance"
+        info "would use Papirus-Dark icons"
+
+        if [[ -d "$HOME/.icons/Bibata-Modern-Ice" ||
+              -d "$HOME/.local/share/icons/Bibata-Modern-Ice" ]]; then
+            info "would use Bibata-Modern-Ice cursor"
+        else
+            info "Bibata-Modern-Ice cursor not installed; leaving cursor unchanged"
+        fi
+
+        return 0
+    fi
+
+    info "applying dark GTK appearance"
+
+    if ! command -v gsettings >/dev/null 2>&1; then
+        warn "gsettings not found; GTK appearance was not changed"
+        return 0
+    fi
+
+    gsettings set \
+        org.gnome.desktop.interface \
+        gtk-theme \
+        "adw-gtk3-dark" \
+        2>/dev/null ||
+        warn "could not set GTK theme"
+
+    gsettings set \
+        org.gnome.desktop.interface \
+        icon-theme \
+        "Papirus-Dark" \
+        2>/dev/null ||
+        warn "could not set icon theme"
+
+    if [[ -d "$HOME/.icons/Bibata-Modern-Ice" ||
+          -d "$HOME/.local/share/icons/Bibata-Modern-Ice" ]]; then
+        gsettings set \
+            org.gnome.desktop.interface \
+            cursor-theme \
+            "Bibata-Modern-Ice" \
+            2>/dev/null ||
+            warn "could not set cursor theme"
+    else
+        info "Bibata-Modern-Ice cursor not installed; leaving cursor unchanged"
+    fi
+
+    ok "appearance configured"
 }

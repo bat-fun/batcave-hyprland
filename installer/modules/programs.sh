@@ -142,6 +142,8 @@ plan_programs() {
             chromium \
             google-chrome
     )"
+
+    PROGRAM_MENU="rofi -show drun"
 }
 
 write_programs() {

@@ -36,13 +36,18 @@ install_services() {
             continue
         fi
 
-        systemctl \
-            --user \
-            enable \
-            --now \
-            "$service" \
-            >/dev/null 2>&1 ||
+        if ! systemctl --user list-unit-files "$service" \
+            >/dev/null 2>&1; then
+            warn "$service is not available; skipping"
+            continue
+        fi
+
+        if systemctl --user enable --now "$service" \
+            >/dev/null 2>&1; then
+            ok "$service enabled"
+        else
             warn "$service could not be started"
+        fi
     done
 
     if (( DRY_RUN )); then
