@@ -284,17 +284,23 @@ initialize_wallpaper() {
             warn "awww is not available; wallpaper not applied"
         fi
 
-    elif [[ "$WALLPAPER_MODE" == "random" ]]; then
-        if command -v "$HOME/.local/bin/batcave-wallpaper" \
-            >/dev/null 2>&1; then
+        elif [[ "$WALLPAPER_MODE" == "random" ]]; then
+        if command -v awww >/dev/null 2>&1; then
+            if awww img "$WALLPAPER_SOURCE" \
+                --transition-type grow \
+                --transition-duration 0.8; then
 
-            if "$HOME/.local/bin/batcave-wallpaper"; then
-                ok "wallpaper initialized"
+                mkdir -p "$HOME/.cache/batcave"
+
+                printf '%s\n' "$WALLPAPER_SOURCE" \
+                    > "$HOME/.cache/batcave/last-wallpaper"
+
+                ok "random wallpaper applied"
             else
-                warn "wallpaper initialization failed"
+                warn "random wallpaper could not be applied"
             fi
         else
-            warn "batcave-wallpaper helper not found"
+            warn "awww is not available; wallpaper not applied"
         fi
     fi
 }

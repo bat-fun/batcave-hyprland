@@ -56,7 +56,10 @@ install_config() {
         fi
 
         backup_one "$HOME/$file"
-        install_one "$file"
+
+        sudo install -Dm644 \
+            "$ROOT/$file" \
+            "$HOME/$file"
     done
 
     if (( DRY_RUN )); then

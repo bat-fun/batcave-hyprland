@@ -233,8 +233,9 @@ preflight() {
     ok "machine: $MACHINE_TYPE"
     ok "repository structure"
 
-    (( DRY_RUN )) &&
+    if (( DRY_RUN )); then
         warn "DRY RUN: no changes will be made."
+    fi
 }
 
 # --------------------------------------------------
