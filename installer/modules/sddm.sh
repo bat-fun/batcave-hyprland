@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
 plan_sddm() {
-    INSTALL_SDDM=0
-
     # Only Full/Custom editions may opt into SDDM.
     if [[ "$EDITION" != "full" && "$EDITION" != "custom" ]]; then
+        INSTALL_SDDM=0
         return 0
     fi
 
@@ -24,6 +23,7 @@ plan_sddm() {
         "Y"; then
         INSTALL_SDDM=1
     else
+        INSTALL_SDDM=0
         info "SDDM: skipped"
     fi
 }

@@ -16,8 +16,8 @@ EDITION=""
 MACHINE_TYPE="desktop"
 
 PROGRAM_TERMINAL="kitty"
-PROGRAM_BROWSER="firefox"
-PROGRAM_EDITOR="nvim"
+PROGRAM_BROWSER="brave"
+PROGRAM_EDITOR="code"
 PROGRAM_FILE_MANAGER="thunar"
 PROGRAM_MENU="rofi -show drun"
 

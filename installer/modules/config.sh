@@ -26,6 +26,11 @@ build_config_list() {
         ".config/rofi/batcave.rasi"
         ".config/rofi/config.rasi"
     )
+    SCRIPT_FILES=(
+    ".local/bin/batcave-init"
+    ".local/bin/batcave-theme"
+    ".local/bin/batcave-wallpaper"
+    )
 
     if (( FEATURE_DESKTOP )); then
         CONFIG_FILES+=(
@@ -58,6 +63,19 @@ install_config() {
         backup_one "$HOME/$file"
 
         sudo install -Dm644 \
+            "$ROOT/$file" \
+            "$HOME/$file"
+    done
+
+    for file in "${SCRIPT_FILES[@]}"; do
+        if (( DRY_RUN )); then
+            printf '  • would install %s\n' "$file"
+            continue
+        fi
+
+        backup_one "$HOME/$file"
+
+        install -Dm755 \
             "$ROOT/$file" \
             "$HOME/$file"
     done
